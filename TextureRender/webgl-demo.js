@@ -193,50 +193,6 @@ function main() {
 
     requestAnimationFrame(drawScene);
 
-    function drawQuad(aspect, rotate) {
-        // Tell it to use our program (pair of shaders)
-        gl.useProgram(program);
-
-        // Bind the attribute/buffer set we want.
-        gl.bindVertexArray(cubeVao);
-
-        // Compute the projection matrix
-        var projectionMatrix =
-            m4.perspective(fieldOfViewRadians, aspect, 1, 2000);
-
-        var cameraPosition = [0, 0, 2];
-        var up = [0, 1, 0];
-        var target = [0, 0, 0];
-
-        // Compute the camera's matrix using look at.
-        var cameraMatrix = m4.lookAt(cameraPosition, target, up);
-
-        // Make a view matrix from the camera matrix.
-        var viewMatrix = m4.inverse(cameraMatrix);
-
-        var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
-
-        var matrix = m4.xRotate(viewProjectionMatrix, modelXRotationRadians);
-        matrix = m4.yRotate(matrix, modelYRotationRadians);
-
-        if (!rotate) {
-            matrix = m4.identity();
-        }
-
-        // Set the matrix.
-        gl.uniformMatrix4fv(matrixLocation, false, matrix);
-
-        // Tell the shader to use texture unit 0 for u_texture
-        gl.uniform1i(textureLocation, 0);
-
-        // Draw the geometry.
-        var primitiveType = gl.TRIANGLES;
-        var offset = 0;
-        var count = 6;
-        gl.disable(gl.CULL_FACE);
-        gl.drawArrays(primitiveType, offset, count);
-    }
-
 
     function drawCube(aspect, rotate) {
         // Tell it to use our program (pair of shaders)
@@ -334,7 +290,7 @@ function main() {
 
 
             const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
-            drawQuad(aspect, true);
+            drawCube(aspect, true);
         }
 
         requestAnimationFrame(drawScene);
